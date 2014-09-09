@@ -59,10 +59,10 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (~> 4.1.4)
-  elasticsearch
+  elasticsearch (~> 1.0.5)
   faraday
   foreman
-  puma
+  puma (~> 2.9.1)
   sinatra (~> 1.4.5)
   sinatra-contrib
   yajl-ruby
