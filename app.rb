@@ -10,10 +10,15 @@ ES = Elasticsearch::Client.new(url: ENV['ELASTICSEARCH_URL'])
 class App < Sinatra::Base
   helpers Sinatra::JSON
 
-  get '/places' do
-    response = ES.search(index: 'places', search_type: 'count', body: query)
+  before do
+    cache_control :public, :must_revalidate, max_age: 3600
+    etag params[:query].downcase
+  end
 
-    suggestions = response['suggest']['placesuggest'].first['options'].map do |result|
+  get '/places' do
+    results = ES.search(index: 'places', search_type: 'count', body: query)
+
+    suggestions = results['suggest']['placesuggest'].first['options'].map do |result|
       time_zone_offset = Time.now.in_time_zone(result['payload']['timeZoneId']).utc_offset
       result['payload'].merge('timeZoneOffset' => time_zone_offset)
     end
