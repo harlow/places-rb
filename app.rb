@@ -5,7 +5,7 @@ require 'sinatra/base'
 require 'sinatra/json'
 require 'yajl'
 
-ES = Elasticsearch::Client.new
+ES = Elasticsearch::Client.new(url: ENV['ELASTICSEARCH_URL'])
 
 class App < Sinatra::Base
   helpers Sinatra::JSON
